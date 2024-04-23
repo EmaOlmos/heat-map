@@ -31,14 +31,13 @@ function App() {
       const y = d3.scaleLinear(minMaxMonths, [0, height]);
 
       // axis
-      svg.append("g")
-      .attr("transform", )
+      svg.append("g").attr("transform");
     });
   }, []);
 
   return (
     <>
-      <h1>ola</h1>
+      <h1>adios</h1>
       <div id="svgDiv"></div>
     </>
   );
