@@ -7,7 +7,7 @@ function App() {
 
   useEffect(() => {
     d3.json(url).then((d) => {
-      const width = 1000;
+      const width = 2000;
       const height = 600;
       const margin = { left: 60, up: 20, right: 30, down: 20 };
 
@@ -27,17 +27,14 @@ function App() {
         .style("background-color", "aliceblue");
 
       // scales
-      const x = d3.scaleLinear(minMaxYears, [
-        margin.left,
-        width - margin.right,
-      ]);
-      const y = d3.scaleLinear(minMaxMonths, [margin.down, height - margin.up]);
+      const x = d3.scaleBand(minMaxYears, [margin.left, width - margin.right]);
+      const y = d3.scaleBand(minMaxMonths, [margin.down, height - margin.up]);
 
       // axis
       const xAxis = svg
         .append("g")
         .attr("transform", `translate (0,${height - margin.down})`)
-        .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+        .call(d3.axisBottom(x));
 
       const yAxis = svg
         .append("g")
@@ -50,6 +47,17 @@ function App() {
             return format(date);
           })
         );
+
+      const rects = svg
+        .append("g")
+        .selectAll()
+        .data(d.monthlyVariance)
+        .join("rect")
+        .attr("fill", "blue")
+        .attr("width", (d) => x.band)
+        .attr("height", 10)
+        .attr("x", (d) => x(d.year))
+        .attr("y", (d) => y(d.month));
     });
   }, []);
 
