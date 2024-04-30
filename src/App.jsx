@@ -15,6 +15,7 @@ function App() {
         .domain([0, 0.25, 0.5, 0.75, 1])
         .range(["#B0E2FF", "#CEE7FF", "#FFDAB9", "#FFFFE0", "#FFCCCC"]);
       const base = d.baseTemperature;
+      const format = d3.utcFormat("%B");
       console.log(base);
 
       const months = d.monthlyVariance.map((e) => e.month);
@@ -22,6 +23,13 @@ function App() {
       const variances = d.monthlyVariance.map((e) => e.variance);
 
       const minMaxYears = d3.extent(years);
+
+      // making the tooltip
+      const tip = d3
+        .select("body")
+        .append("div")
+        .attr("class", "totip")
+        .style("opacity", 0);
 
       // select and set svg props
       const svg = d3
@@ -56,7 +64,6 @@ function App() {
           d3.axisLeft(y).tickFormat((m) => {
             const date = new Date(0);
             date.setUTCMonth(m - 1);
-            const format = d3.utcFormat("%B");
             return format(date);
           })
         );
@@ -64,6 +71,7 @@ function App() {
       const barWidth =
         (x(minMaxYears[1]) - x(minMaxYears[0])) /
         (minMaxYears[1] - minMaxYears[0]);
+
       const rects = svg
         .append("g")
         .selectAll()
@@ -90,6 +98,11 @@ function App() {
           } else {
             return colors(1);
           }
+        })
+        .on("mouseover", (e, d) => {
+          const date = new Date(d.year, d.month);
+          tip.style("opacity", 1).html(d3.utcFormat("%Y - %B")(date) + "<br>");
+          console.log(d);
         })
         .attr("width", barWidth)
         .attr("height", y.bandwidth())
