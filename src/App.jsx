@@ -101,13 +101,61 @@ function App() {
         })
         .on("mouseover", (e, d) => {
           const date = new Date(d.year, d.month);
-          tip.style("opacity", 1).html(d3.utcFormat("%Y - %B")(date) + "<br>");
-          console.log(d);
+          const temp = base + d.variance;
+          tip
+            .style("opacity", 1)
+            .html(
+              d3.utcFormat("%Y - %B")(date) +
+                "<br>" +
+                "Temperature: " +
+                Math.round(temp * 10) / 10 +
+                "<br/>" +
+                "Variance: " +
+                Math.round(d.variance * 10) / 10
+            );
+          console.log(d, temp);
         })
         .attr("width", barWidth)
         .attr("height", y.bandwidth())
         .attr("x", (d) => x(d.year))
         .attr("y", (d) => y(d.month));
+
+      // legend thing
+      const legendW = 800;
+
+      let minTemp = base + d3.min(variances);
+      let maxTemp = base + d3.max(variances);
+
+      minTemp = Math.round(minTemp * 10) / 10;
+      maxTemp = Math.round(maxTemp * 10) / 10;
+
+      const legendX = d3
+        .scaleLinear()
+        .domain([minTemp, maxTemp])
+        .range([margin.left, legendW - margin.right]);
+
+      const legend = d3
+        .select("body")
+        .append("svg")
+        .attr("width", legendW)
+        .append("g")
+        .attr("transform", `translate(0,${margin.up + 100})`)
+        .call(
+          d3.axisBottom(legendX).tickFormat(d3.format(".1f")).tickSize(10, 0)
+        );
+
+      legend
+        .append("g")
+        .selectAll("rect")
+        .data(variances)
+        .join("rect")
+        .style("fill", (d) => {
+          return "blue";
+        })
+        .attr("x", (d) => legendX(d))
+        .attr("y", -20)
+        .attr("width", variances.length / legendW)
+        .attr("height", 20);
     });
   }, []);
 
