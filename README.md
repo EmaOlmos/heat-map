@@ -1,8 +1,7 @@
-# React + Vite
+# Monthly Global Land-Surface Temperature, a Heat Map
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 1753 - 2015: base temperature 8.66℃
 
-Currently, two official plugins are available:
+This project shows a heat map of monthly global land-surface temperature. That's it. Hope you like it and feel free to clone if you want.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Made with so much dedication (and suffer). ~ 🍒
